@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+
+<body>
+    <!-- <script>
+        const firebase = require("firebase");
+        require("firebase/firestore");
+         alert(firebase);
+    </script> -->
+<style>
+    form{
+        border:2px solid green;
+        padding:20px;
+        display: flex;
+        flex-direction:column;
+        justify-content:center;
+        width:70%;
+        
+
+}
+body{
+    display: flex;
+    justify-content:center;
+    flex-direction:center;
+}
+form label{
+    float:left;
+}
+form input{
+    float:right;
+    width:100%;
+    padding:5px 0px;
+}
+form button{
+    width:100%;
+    padding: 5px;
+
+}
+
+form button,input,label{
+    margin:10px 0px;
+}
+form p{
+    width:100%;
+   
+    text-align:center;
+  
+    padding: 5px;   
+}
+form a{
+    margin-top:0px;
+    text-decoration:none;
+}
+</style>
+
+
+    <form action="/">
+        <div class="form-group">
+            
+
+            <input type="text" name="email" id="email" placeholder="Enter you Email">
+        </div>
+        <div class="form-group">
+  
+            <input type="password" name="password" id=" password" placeholder="Enter your password">
+        </div>
+         <button type="submit" class="btn btn-primary">Sign in</button>
+         <a href="/signup.html"><p>Sign up</p></a>
+
+    </form>
+
+<script>
+    var d;
+function getData() {
+    const url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAAmj9_Osf0-48-UT1-tRbFDdLdkpzlxtg"
+    var xhr = new XMLHttpRequest()
+    xhr.open('GET', url, true)
+    xhr.send();
+    xhr.onload = function () {
+        console.log(xhr.status);
+        if (xhr.status === 200) {
+          var data = xhr.responseText;
+          d = JSON.parse(data);
+          displayData(d);
+      console.log(d);
+        }
+    };
+}
+
+function displayData(d) {
+    var b = "";
+    d.forEach(el => {
+        b+='<tr><td>'+el.userId+'</td><td>'+el.id+'</td><td>'+el.title+'</td><td>'+el.body+'</td></tr>';
+    });
+    document.getElementById('tform').innerHTML=b;
+}
+
+function postData() {
+    var data = {
+        employee_name: document.getElementById("emp_name").value,
+        employee_salary: document.getElementById("emp_sal").value,
+        employee_age: document.getElementById("emp_age").value,
+        profile_image: document.getElementById("emp_img").value
+    }
+
+    var post = JSON.stringify(data)
+    const url = "https://dummy.restapiexample.com/api/v1/create"
+    var xhr = new XMLHttpRequest()
+    xhr.open('POST', url, true)
+    xhr.setRequestHeader('Content-type', 'application/json; charset=UTF-8')
+    xhr.send(post);
+    xhr.onload = function () {
+
+        if (xhr.status === 200) {
+            var data = xhr.responseText;
+            if (data) {
+                document.getElementById("data").innerHTML = data;
+            }
+        }
+    }
+}
+
+
+</script>
+
+</body>
+
+</html>

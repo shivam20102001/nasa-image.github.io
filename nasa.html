@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+<style>
+	body{
+		background-color:black;
+	}
+	*{
+		padding:0;
+		margin:0;
+	}
+	#button-box{
+		display:flex;
+		flex-direction:row;
+		justify-content:space-evenly;
+
+	}
+	body{
+		align-content:center;
+
+	}
+	img{
+		margin:5% 5% ;
+		width:90%;
+	}
+	#header{
+		display:flex;
+		justify-content:space-between;
+		flex-direction: row;
+		align-items:center;
+		margin-bottom: 20px;
+		padding:5px 8px;
+	}
+	#p1 {
+		display:inline-block;
+
+	}
+	#header-image{
+		display:inline-block;
+		margin:0px;
+		width:8%;
+		height:auto;
+
+	}
+	h2{
+		display: inline-block;
+		
+	}
+	#heads-off{
+		display:flex;
+		justify-content:center;
+		margin:100px 0px;
+		flex-direction: column;
+		align-items: center;
+	}
+	#heads-off h2{
+		font-size:30px;
+	}
+
+	#img-title{
+		font-size:25px;
+display:flex;
+flex-direction: column;
+align-items: center;
+justify-content:center;
+margin:50px 0px 0px 0px;
+border:2px double black;
+	}
+	#apod_pic{
+width:50%;
+height:auto;
+margin:0; 
+margin-bottom:30px;
+	}
+	
+</style>
+<DIV ID="header">
+	<img id="header-image" src="https://www.nasa.gov/sites/all/themes/custom/nasatwo/images/nasa-logo.svg" alt="logo" >
+<p id="p1">Today's Date</p>
+</DIV>
+
+<div id="heads-off">
+	<h2>Astronomy Picture of the day</h2>
+	<h3><em class="date" id="pic_date" ></em></h3>
+</div>
+	<div id="button-box" >
+		<button onclick="todays()">Today</button>
+		<div>
+	<input type="date" id="date"><button  onclick="update_date()">See</button></div>
+</div>
+<div id="img-title">
+	<h3 class="img-title" id="title">NASA</h3>
+	<img src="https://www.nasa.gov/sites/all/themes/custom/nasatwo/images/nasa-logo.svg" alt="no image" id="apod_pic" class="img-apod">
+</div>
+	<p class="caption" id="caption"></p>
+
+
+	<script type="text/javascript">
+
+//todays date
+	var date = new Date();
+	var current_date = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+ date.getDate();
+	document.getElementById("p1").innerHTML ="Today's Date: "+ current_date;
+
+
+		var method = "GET";
+		const key =
+		"U0PqJ5UprbVQExkXc7ZgsGVfIM7Z1O8Uiv7g2hOO";
+
+		var url ="https://api.nasa.gov/planetary/apod?api_key="
+				+ key + "&date=";
+		var mode = true;
+		let datee;
+
+	
+			
+            
+            function update_date(){
+            datee = document.getElementById("date").value;
+			sendHttpRequest(method, url + datee,
+				mode).then((data) => {
+				update(data);
+        });}
+
+
+
+
+        function todays(){
+            datee= current_date;
+			sendHttpRequest(method, url + datee,
+				mode).then((data) => {
+				update(data);
+			});
+        }
+      
+	
+
+		function update(data) {
+			document.getElementById("pic_date")
+				.innerHTML = data.date;
+				if(data.title!=null){
+			document.getElementById("title")
+				.innerHTML = data.title;
+				}else{
+					document.getElementById("title")
+				.innerHTML = "no data";
+				}
+				if(data.url!=null){
+			document.getElementById("apod_pic")
+				.src = data.url;
+			}else{
+				document.getElementById("apod_pic").src="#";
+			}
+			if(data.explanation!=null){
+			document.getElementById("caption").innerHTML = data.explanation;
+			}else{
+				document.getElementById("caption").innerHTML = 'No explanation';
+			}
+			return data;
+		}
+
+
+
+
+
+
+		function sendHttpRequest(method, url, mode) {
+			return new Promise((resolve, reject) => {
+
+				var req = new XMLHttpRequest();
+				req.onreadystatechange = function () {
+				
+						if (this.status == 200 || this.readyState == 4) {
+							var data = JSON.parse(this.response);
+							console.log(data);
+							resolve(data);
+						}
+					
+				}
+				req.open(method, url, mode);
+				req.send();
+			});
+		}
+	</script>
+</body>
+
+</html>
